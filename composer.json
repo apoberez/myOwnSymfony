@@ -1,0 +1,16 @@
+{
+    "name": "root/create-framework",
+    "description": "Create framework for fun",
+    "authors": [
+        {
+            "name": "Alexander Pobereznichenko",
+            "email": "apobereznichenko@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "^2.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.*"
+    }
+}
