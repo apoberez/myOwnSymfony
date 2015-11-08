@@ -5,7 +5,7 @@
  * Time: 22:03
  */
 
-namespace Controller;
+namespace Calendar\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
