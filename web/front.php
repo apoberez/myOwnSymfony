@@ -13,14 +13,10 @@ $request = Request::createFromGlobals();
 
 /** @var RouteCollection $routes */
 $routes = include __DIR__ . '/../src/Calendar/app.php';
-
-$context = new RequestContext();
-$context->fromRequest($request);
-$matcher = new UrlMatcher($routes, $context);
-
+$matcher = new UrlMatcher($routes, new RequestContext());
 $resolver = new ControllerResolver();
-
 $framework = new Framework($matcher, $resolver);
+
 $response = $framework->handle($request);
 
 $response->send();
