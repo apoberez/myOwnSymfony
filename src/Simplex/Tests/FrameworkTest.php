@@ -56,10 +56,17 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|ControllerResolverInterface $resolver */
         $resolver = new ControllerResolver();
 
-        $framework = new Framework($matcher, $resolver);
+        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $framework = new Framework($matcher, $resolver, $dispatcher);
         $response = $framework->handle(new Request());
 
         $this->assertSame(200, $response->getStatusCode());
+    }
+
+    public function testEventsAreDispatched()
+    {
+        //todo
     }
 
     /**
@@ -81,7 +88,9 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ControllerResolverInterface $resolver */
         $resolver = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface');
+        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
-        return new Framework($matcher, $resolver);
+        return new Framework($matcher, $resolver, $dispatcher);
     }
 }
