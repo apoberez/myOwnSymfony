@@ -2,13 +2,16 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Calendar\EventListener\FrameworkResponseListener;
-use Simplex\Events\FrameworkEvents;
 use Simplex\Framework;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\EventListener\ExceptionListener;
+use Symfony\Component\HttpKernel\EventListener\ResponseListener;
+use Symfony\Component\HttpKernel\EventListener\RouterListener;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -21,10 +24,12 @@ $matcher = new UrlMatcher($routes, new RequestContext());
 $resolver = new ControllerResolver();
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener(FrameworkEvents::ON_RESPONSE, [new FrameworkResponseListener(), 'onResponse']);
+$dispatcher->addSubscriber(new RouterListener($matcher));
+$dispatcher->addSubscriber(new ExceptionListener('Calendar\\Controller\\ErrorController::exceptionAction'));
+$dispatcher->addSubscriber(new ResponseListener('UTF-8'));
 
-$framework = new Framework($matcher, $resolver, $dispatcher);
+$framework = new Framework($dispatcher, $resolver);
+$framework = new HttpCache($framework, new Store(__DIR__.'/../cache'));
 
 $response = $framework->handle($request);
-
 $response->send();

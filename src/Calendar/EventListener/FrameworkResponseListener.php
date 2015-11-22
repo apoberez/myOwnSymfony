@@ -2,12 +2,14 @@
 
 namespace Calendar\EventListener;
 
-
 use Simplex\Events\ResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 class FrameworkResponseListener
 {
+    /**
+     * @param ResponseEvent $event
+     */
     public function onResponse(ResponseEvent $event)
     {
         $response = $event->getResponse();

@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by Alexander Pobereznichenko.
- * Date: 08.11.15
- * Time: 22:03
- */
 
 namespace Calendar\Controller;
 
@@ -12,15 +7,26 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LeapController
 {
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function indexAction(Request $request)
     {
         if ($this->isLeapYear($request->attributes->get('year'))) {
-            return new Response('Yes its leap year');
+            $response = new Response('Yes its leap year');
         } else {
-            return new Response('No it\'s not leap year');
+            $response = new Response('No it\'s not leap year ' . rand(1, 1000) . ' ');
         }
+
+        $response->setTtl(10);
+        return $response;
     }
 
+    /**
+     * @param null $year
+     * @return bool
+     */
     private function isLeapYear($year = null)
     {
         if (null === $year) {
